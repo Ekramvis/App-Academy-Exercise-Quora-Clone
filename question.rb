@@ -15,11 +15,11 @@ class Question
 
   def self.add_question(title, body, author_id)
     query = <<-SQL
- INSERT INTO questions (fname, lname)
-      VALUES (?, ?)
+ INSERT INTO questions (title, body, author_id)
+      VALUES (?, ?, ?)
     SQL
 
-    QuestionsDatabase.instance.execute(query, fname, lname)
+    QuestionsDatabase.instance.execute(query, title, body, author_id)
   end
 
 end

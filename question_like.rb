@@ -1,21 +1,21 @@
 require_relative "questions_database"
 
-class QuestionFollower
+class QuestionLike
 
   def self.find_by_id(id)
     query = <<-SQL
       SELECT *
-        FROM question_followers
-       WHERE question_followers.id = ?
+        FROM question_likes
+       WHERE question_likes.id = ?
     SQL
 
     QuestionsDatabase.instance.execute(query, id)
   end
 
 
-  def self.add_follower(user_id, question_id)
+  def self.add_like(user_id, question_id)
     query = <<-SQL
- INSERT INTO question_followers (user_id, question_id)
+ INSERT INTO question_likes (user_id, question_id)
       VALUES (?, ?)
     SQL
 
