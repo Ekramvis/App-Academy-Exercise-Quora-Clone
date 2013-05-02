@@ -24,4 +24,16 @@ class QuestionLike
     QuestionsDatabase.instance.execute(query, user_id, question_id)
   end
 
+  def self.likers_for_question_id(question_id)
+    query = <<-SQL
+      SELECT u.*
+        FROM question_likes AS ql
+        JOIN users AS u
+          ON u.id = ql.user_id
+       WHERE ql.question_id = ?
+    SQL
+
+    QuestionsDatabase.instance.execute(query, question_id)
+  end
+
 end

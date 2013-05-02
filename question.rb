@@ -18,6 +18,9 @@ class Question
     Reply.find_by_question_id(@id)
   end
 
+  def followers
+    QuestionFollower.followers_for_question_id(@id)
+  end
 
   def self.find_by_author_id(id)
     query = <<-SQL
@@ -40,5 +43,8 @@ class Question
     QuestionsDatabase.instance.execute(query, id)
   end
 
+  def self.most_followed(n)
+    QuestionFollower.most_followed_questions(n)
+  end
 
 end

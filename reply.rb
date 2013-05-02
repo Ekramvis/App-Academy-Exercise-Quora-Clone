@@ -3,6 +3,15 @@ require_relative 'questions_database'
 
 class Reply
 
+  def child_replies
+    query = <<-SQL
+      SELECT body
+        FROM replies
+       WHERE replies.parent_id = #{@id}
+    SQL
+    QuestionsDatabase.instance.execute(query)
+  end
+
   def parent_reply
     if @parent_id
       Reply.find_by_id(@parent_id)
@@ -42,6 +51,7 @@ class Reply
   end
 
   def initialize(attributes={})
+    @id = attributes["id"]
     @question_id = attributes["question_id"]
     @parent_id = attributes["parent_id"]
     @author_id = attributes["author_id"]

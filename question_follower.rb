@@ -22,4 +22,42 @@ class QuestionFollower
     QuestionsDatabase.instance.execute(query, user_id, question_id)
   end
 
+  def self.followers_for_question_id(id)
+    query = <<-SQL
+      SELECT u.fname, u.lname
+        FROM question_followers as qf
+        JOIN users as u
+          ON u.id = qf.user_id
+       WHERE qf.question_id = ?
+    SQL
+
+    results = QuestionsDatabase.instance.execute(query, id)
+  end
+
+  def self.followed_questions_for_user_id(id)
+    query = <<-SQL
+      SELECT *
+        FROM questions AS q
+        JOIN question_followers as qf
+          ON qf.question_id = q.id
+       WHERE qf.user_id = ?
+    SQL
+
+    results = QuestionsDatabase.instance.execute(query, id)
+  end
+
+  def self.most_followed_questions(n)
+    query = <<-SQL
+      SELECT q.*
+        FROM questions AS q
+        JOIN question_followers AS qf
+          ON q.id = qf.question_id
+    GROUP BY q.id
+    ORDER BY COUNT(qf.user_id) DESC
+       LIMIT ?
+    SQL
+
+    QuestionsDatabase.instance.execute(query, n)
+  end
+
 end
