@@ -1,4 +1,5 @@
 require_relative 'questions_database'
+# require_relative 'table'
 
 class Question
 

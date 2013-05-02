@@ -1,9 +1,9 @@
-class Table
+module Table
 
-  def self.addition(table, *columns)
-    question_marks = (columns.size * "?,").chop
+  def addition(table, options)
+    question_marks = ("?," * options.keys.size).chop
       query = <<-SQL
-   INSERT INTO #{table} (#{columns.join(",")})
+   INSERT INTO #{table} (#{options.keys.join(",")})
         VALUES (#{question_marks})
       SQL
 
