@@ -1,4 +1,5 @@
 require_relative 'questions_database'
+require_relative 'question'
 
 
 class User
@@ -23,25 +24,25 @@ class User
     results.map {|result| User.new(result)}[0]
   end
 
-  def authored_questions
+  def self.find_by_id(id)
     query = <<-SQL
       SELECT *
-        FROM questions
-       WHERE questions.author_id = ?
+        FROM users
+       WHERE users.id = ?
     SQL
 
-    QuestionsDatabase.instance.execute(query, @id)
+    results = QuestionsDatabase.instance.execute(query, id)
+
+    results.map {|result| User.new(result)}[0]
+  end
+
+  def authored_questions
+    Question.find_by_author_id(@id)
   end
 
 
   def authored_replies
-    query = <<-SQL
-      SELECT *
-        FROM replies
-       WHERE replies.author_id = ?
-    SQL
-
-    QuestionsDatabase.instance.execute(query, @id)
+    Reply.find_by_user_id(@id)
   end
 
 

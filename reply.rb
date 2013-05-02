@@ -3,6 +3,52 @@ require_relative 'questions_database'
 
 class Reply
 
+  def parent_reply
+    if @parent_id
+      Reply.find_by_id(@parent_id)
+    else
+      raise Exception.new "no parent"
+    end
+  end
+
+  def author
+    User.find_by_id(@author_id)
+  end
+
+  def question
+    Question.find_by_id(@question_id)
+  end
+
+  def self.find_by_question_id(id)
+    query = <<-SQL
+      SELECT *
+        FROM replies
+       WHERE replies.question_id = ?
+    SQL
+
+    results = QuestionsDatabase.instance.execute(query, id)
+    results.map { |result| Reply.new(result) }
+  end
+
+  def self.find_by_user_id(id)
+    query = <<-SQL
+      SELECT *
+        FROM replies
+       WHERE replies.author_id = ?
+    SQL
+
+    results = QuestionsDatabase.instance.execute(query, id)
+    results.map { |result| Reply.new(result) }
+  end
+
+  def initialize(attributes={})
+    @question_id = attributes["question_id"]
+    @parent_id = attributes["parent_id"]
+    @author_id = attributes["author_id"]
+    @body = attributes["body"]
+  end
+
+
   def self.find_by_id(id)
     query = <<-SQL
       SELECT *

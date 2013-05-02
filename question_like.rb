@@ -2,6 +2,8 @@ require_relative "questions_database"
 
 class QuestionLike
 
+  def initialize()
+
   def self.find_by_id(id)
     query = <<-SQL
       SELECT *
