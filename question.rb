@@ -41,6 +41,7 @@ class Question
     SQL
 
     QuestionsDatabase.instance.execute(query, id)
+
   end
 
   def self.most_followed(n)

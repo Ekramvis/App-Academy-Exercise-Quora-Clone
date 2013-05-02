@@ -44,6 +44,8 @@ class QuestionFollower
     SQL
 
     results = QuestionsDatabase.instance.execute(query, id)
+
+    results.map { |result| Question.new(result) }
   end
 
   def self.most_followed_questions(n)
